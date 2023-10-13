@@ -30,14 +30,15 @@ export default class View {
   }
 
   private gameLoop() {
+    this.game.tick()
     this.clearCanvas()
     this.drawSquares()
-    this.game.tick()
     setTimeout(() => requestAnimationFrame(this.gameLoop.bind(this)), 200)
   }
 
   private clearCanvas() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+    this.ctx.fillStyle = 'white'
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
   }
 
   private drawRect(x: number, y: number, w: number, h: number, color: string) {
@@ -90,8 +91,8 @@ export default class View {
   }
 
   private drawFoodContent(square: Square, i: number, j: number) {
-    const squareX = i * SQUARE_SIZE + i * SQUARES_OFFSET
-    const squareY = j * SQUARE_SIZE + j * SQUARES_OFFSET
+    const squareX = j * SQUARE_SIZE + j * SQUARES_OFFSET
+    const squareY = i * SQUARE_SIZE + i * SQUARES_OFFSET
     const centerX = squareX + SQUARE_SIZE / 2
     const centerY = squareY + SQUARE_SIZE / 2
     this.drawCircle(centerX, centerY, SQUARE_SIZE / 4, 'red')

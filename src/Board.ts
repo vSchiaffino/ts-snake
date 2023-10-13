@@ -23,9 +23,12 @@ export default class Board {
     const rowIndex = this.squares.findIndex((row) =>
       row.some((square) => square.hasContent(content))
     )
-    const colIndex = this.squares[rowIndex].findIndex((square) =>
-      square.hasContent(content)
-    )
+    const colIndex =
+      rowIndex == -1
+        ? -1
+        : this.squares[rowIndex].findIndex((square) =>
+            square.hasContent(content)
+          )
     return [rowIndex, colIndex]
   }
 
@@ -37,11 +40,16 @@ export default class Board {
       : this.squares[rowIndex][colIndex]
   }
 
-  public getSquareApplyingMovement(square: Square, movement: [number, number]) {
+  public getSquareApplyingMovement(
+    square: Square | null,
+    movement: [number, number]
+  ) {
     const rowIndex = this.squares.findIndex((row) =>
       row.some((s) => s === square)
     )
     const colIndex = this.squares[rowIndex].findIndex((s) => s === square)
+    if (rowIndex == -1 || colIndex == -1) return null
+
     const [rowMovement, colMovement] = movement
     const newRow = rowIndex + rowMovement
     const newCol = colIndex + colMovement

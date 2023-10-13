@@ -1,3 +1,4 @@
+import Snake from 'Snake.js'
 import SquareContent, { ContentKey } from './SquareContent.js'
 
 export default class FoodContent extends SquareContent {
@@ -7,5 +8,9 @@ export default class FoodContent extends SquareContent {
 
   public isFood(): boolean {
     return true
+  }
+
+  public snakePassingThrough(snake: Snake): void {
+    snake.eat()
   }
 }

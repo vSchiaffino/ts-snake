@@ -1,3 +1,4 @@
+import Snake from './Snake.js'
 import NoContent from './content/NoContent.js'
 import SquareContent from './content/SquareContent.js'
 
@@ -23,5 +24,9 @@ export default class Square {
     const oldContent = this.content
     this.content = new NoContent()
     return oldContent
+  }
+
+  public snakePassingThrough(snake: Snake) {
+    this.content.snakePassingThrough(snake)
   }
 }

@@ -1,6 +1,7 @@
 import SnakeBody from './content/SnakeBody.js'
 import Board from './Board.js'
 import Square from 'Square.js'
+import FoodContent from 'content/Food.js'
 
 export enum Direction {
   UP,
@@ -43,21 +44,32 @@ export default class Snake {
 
     let lastMovedSquare = null
     for (const part of this.body) {
-      const oldBodySquare = board.getSquareWhereIs(part) as Square
+      const oldBodySquare = board.getSquareWhereIs(part)
       const newBodySquare = lastMovedSquare
         ? lastMovedSquare
         : board.getSquareApplyingMovement(oldBodySquare, posModifier)
 
+      if (!oldBodySquare) {
+        lastMovedSquare?.setContent(part)
+        return
+      }
+
       if (!newBodySquare) {
         return
       }
+
+      newBodySquare.snakePassingThrough(this)
       newBodySquare.setContent(oldBodySquare.popContent())
       lastMovedSquare = oldBodySquare
     }
   }
 
+  public eat() {
+    console.log('eat')
+    this.body.push(new SnakeBody())
+  }
+
   public changeDirection(direction: Direction) {
-    console.log('set direction', direction)
     this.direction = direction
   }
 }

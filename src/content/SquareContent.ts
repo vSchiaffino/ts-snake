@@ -1,7 +1,9 @@
+import Snake from '../Snake.js'
+
 export enum ContentKey {
   no,
   food,
-  snake
+  snake,
 }
 
 export default abstract class SquareContent {
@@ -9,4 +11,5 @@ export default abstract class SquareContent {
     return false
   }
   public abstract key(): ContentKey
+  public snakePassingThrough(snake: Snake) {}
 }
