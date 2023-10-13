@@ -1,5 +1,4 @@
 import NoContent from './content/NoContent.js'
-import FoodContent from './content/FoodContent.js'
 import SquareContent from './content/SquareContent.js'
 
 export default class Square {
@@ -12,7 +11,17 @@ export default class Square {
     return this.content.isFood()
   }
 
-  public spawnFood() {
-    this.content = new FoodContent()
+  public setContent(content: SquareContent) {
+    this.content = content
+  }
+
+  public hasContent(content: SquareContent) {
+    return this.content === content
+  }
+
+  public popContent() {
+    const oldContent = this.content
+    this.content = new NoContent()
+    return oldContent
   }
 }

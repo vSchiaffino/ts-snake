@@ -1,6 +1,7 @@
 export enum ContentKey {
   no,
   food,
+  snake
 }
 
 export default abstract class SquareContent {

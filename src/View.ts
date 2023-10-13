@@ -19,11 +19,11 @@ export default class View {
   }
 
   public start() {
-    this.setCanvasSize()
+    this.setInitialCanvasSize()
     requestAnimationFrame(this.gameLoop.bind(this))
   }
 
-  private setCanvasSize() {
+  private setInitialCanvasSize() {
     const { ROW_LENGTH, COL_LENGTH } = this.game.board.getSize()
     this.canvas.width = ROW_LENGTH * SQUARE_SIZE + ROW_LENGTH * SQUARES_OFFSET
     this.canvas.height = COL_LENGTH * SQUARE_SIZE + COL_LENGTH * SQUARES_OFFSET
@@ -33,7 +33,7 @@ export default class View {
     this.clearCanvas()
     this.drawSquares()
     this.game.tick()
-    requestAnimationFrame(this.gameLoop.bind(this))
+    setTimeout(() => requestAnimationFrame(this.gameLoop.bind(this)), 500)
   }
 
   private clearCanvas() {
@@ -51,7 +51,6 @@ export default class View {
     radius: number,
     color: string
   ) {
-    console.log(centerX, centerY, radius)
     this.ctx.fillStyle = color
     this.ctx.beginPath()
     this.ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI)
@@ -63,19 +62,19 @@ export default class View {
     for (let i = 0; i < squares.length; i++) {
       for (let j = 0; j < squares[i].length; j++) {
         const square = squares[i][j]
-        this.drawSquare(i, j)
+        this.drawSquare(i, j, 'gray')
         this.drawSquareContent(square, i, j)
       }
     }
   }
 
-  private drawSquare(i: number, j: number) {
+  private drawSquare(i: number, j: number, color: string) {
     this.drawRect(
       j * SQUARE_SIZE + j * SQUARES_OFFSET,
       i * SQUARE_SIZE + i * SQUARES_OFFSET,
       SQUARE_SIZE,
       SQUARE_SIZE,
-      'gray'
+      color
     )
   }
 
@@ -83,19 +82,22 @@ export default class View {
     const contentKey = square.content.key()
     const mapKeyWithMethod = {
       [ContentKey.no]: () => {},
-      [ContentKey.food]: (square: Square, i: number, j: number) =>
-        this.drawFoodContent(square, i, j),
+      [ContentKey.food]: this.drawFoodContent.bind(this),
+      [ContentKey.snake]: this.drawSnakeContent.bind(this),
     }
     const method = mapKeyWithMethod[contentKey]
     method(square, i, j)
   }
 
   private drawFoodContent(square: Square, i: number, j: number) {
-    console.log(`drawind food ${i} ${j}`)
     const squareX = i * SQUARE_SIZE + i * SQUARES_OFFSET
     const squareY = j * SQUARE_SIZE + j * SQUARES_OFFSET
     const centerX = squareX + SQUARE_SIZE / 2
     const centerY = squareY + SQUARE_SIZE / 2
     this.drawCircle(centerX, centerY, SQUARE_SIZE / 4, 'red')
+  }
+
+  private drawSnakeContent(square: Square, i: number, j: number) {
+    this.drawSquare(i, j, 'green')
   }
 }

@@ -1,3 +1,4 @@
+import SquareContent from 'content/SquareContent.js'
 import Square from './Square.js'
 
 export default class Board {
@@ -16,5 +17,21 @@ export default class Board {
 
   public hasFoodInAnySquare() {
     return this.squares.some((row) => row.some((square) => square.hasFood()))
+  }
+
+  public whereIs(content: SquareContent): [number, number] {
+    const rowIndex = this.squares.findIndex((row) =>
+      row.some((square) => square.hasContent(content))
+    )
+    const colIndex = this.squares[rowIndex].findIndex((square) =>
+      square.hasContent(content)
+    )
+    return [rowIndex, colIndex]
+  }
+
+  public getSquareIn(pos: [number, number]) {
+    const row = this.squares[pos[0]]
+    const square = row && row[pos[1]]
+    return square
   }
 }
