@@ -1,5 +1,6 @@
 import SnakeBody from './content/SnakeBody.js'
 import Board from './Board.js'
+import Square from 'Square.js'
 
 export enum Direction {
   UP,
@@ -8,7 +9,7 @@ export enum Direction {
   LEFT,
 }
 
-const mapDirectionWithModifier = {
+const mapDirectionWithModifier: { [key in Direction]: [number, number] } = {
   [Direction.UP]: [-1, 0],
   [Direction.RIGHT]: [0, 1],
   [Direction.DOWN]: [1, 0],
@@ -19,29 +20,40 @@ export default class Snake {
   private direction: Direction | null = null
   private body: SnakeBody[]
 
-  constructor(firstBody: SnakeBody) {
-    this.body = [firstBody]
+  constructor(firstBody: SnakeBody, board: Board) {
+    const secondBody = new SnakeBody()
+    const thirdBody = new SnakeBody()
+    const firstBodyPos = board.whereIs(firstBody)
+    const secondBodySquare = board.getSquareIn([
+      firstBodyPos[0] + 1,
+      firstBodyPos[1],
+    ])
+    secondBodySquare.setContent(secondBody)
+    const thirdBodySquare = board.getSquareIn([
+      firstBodyPos[0] + 2,
+      firstBodyPos[1],
+    ])
+    thirdBodySquare.setContent(thirdBody)
+    this.body = [firstBody, secondBody, thirdBody]
   }
 
   public tick(board: Board) {
     if (this.direction === null) return
-
-    const oldBodyPos = board.whereIs(this.body[0])
     const posModifier = mapDirectionWithModifier[this.direction]
-    const newBodyPos: [number, number] = [
-      oldBodyPos[0] + posModifier[0],
-      oldBodyPos[1] + posModifier[1],
-    ]
 
-    const oldBodySquare = board.getSquareIn(oldBodyPos)
-    const newBodySquare = board.getSquareIn(newBodyPos)
+    let lastMovedSquare = null
+    for (const part of this.body) {
+      const oldBodySquare = board.getSquareWhereIs(part) as Square
+      const newBodySquare = lastMovedSquare
+        ? lastMovedSquare
+        : board.getSquareApplyingMovement(oldBodySquare, posModifier)
 
-    if (!newBodySquare) {
-      console.log('out of bound')
-      return
+      if (!newBodySquare) {
+        return
+      }
+      newBodySquare.setContent(oldBodySquare.popContent())
+      lastMovedSquare = oldBodySquare
     }
-
-    newBodySquare.setContent(oldBodySquare.popContent())
   }
 
   public changeDirection(direction: Direction) {

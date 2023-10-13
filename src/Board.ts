@@ -29,6 +29,26 @@ export default class Board {
     return [rowIndex, colIndex]
   }
 
+  public getSquareWhereIs(content: SquareContent) {
+    const [rowIndex, colIndex] = this.whereIs(content)
+
+    return rowIndex == -1 || colIndex == -1
+      ? null
+      : this.squares[rowIndex][colIndex]
+  }
+
+  public getSquareApplyingMovement(square: Square, movement: [number, number]) {
+    const rowIndex = this.squares.findIndex((row) =>
+      row.some((s) => s === square)
+    )
+    const colIndex = this.squares[rowIndex].findIndex((s) => s === square)
+    const [rowMovement, colMovement] = movement
+    const newRow = rowIndex + rowMovement
+    const newCol = colIndex + colMovement
+
+    return this.squares[newRow] && this.squares[newRow][newCol]
+  }
+
   public getSquareIn(pos: [number, number]) {
     const row = this.squares[pos[0]]
     const square = row && row[pos[1]]

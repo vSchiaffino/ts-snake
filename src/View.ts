@@ -33,7 +33,7 @@ export default class View {
     this.clearCanvas()
     this.drawSquares()
     this.game.tick()
-    setTimeout(() => requestAnimationFrame(this.gameLoop.bind(this)), 500)
+    setTimeout(() => requestAnimationFrame(this.gameLoop.bind(this)), 200)
   }
 
   private clearCanvas() {

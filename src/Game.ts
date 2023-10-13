@@ -20,7 +20,7 @@ export default class Game {
     const med_i = Math.floor(ROW_LENGTH / 2)
     const med_j = Math.floor(COL_LENGTH / 2)
     this.board.squares[med_i][med_j].setContent(firstSnakeBody)
-    return new Snake(firstSnakeBody)
+    return new Snake(firstSnakeBody, this.board)
   }
 
   public start() {
