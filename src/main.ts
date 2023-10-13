@@ -1,7 +1,8 @@
 import { Direction } from './Snake.js'
 import Game from './Game.js'
+
 const canvas = document.getElementById('gameCanvas') as HTMLCanvasElement
-const game = new Game(canvas)
+let game = new Game(canvas)
 
 window.onload = () => {
   if (canvas) {
@@ -22,5 +23,9 @@ window.onkeydown = (e) => {
     game.snake.changeDirection(
       mapkeyWithDirection[e.key as keyof typeof mapkeyWithDirection]
     )
+  }
+  if (e.key == 'Enter') {
+    game = new Game(canvas)
+    game.start()
   }
 }

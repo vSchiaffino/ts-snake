@@ -1,3 +1,4 @@
+import Game from './Game.js'
 import Snake from './Snake.js'
 import NoContent from './content/NoContent.js'
 import SquareContent from './content/SquareContent.js'
@@ -26,7 +27,7 @@ export default class Square {
     return oldContent
   }
 
-  public snakePassingThrough(snake: Snake) {
-    this.content.snakePassingThrough(snake)
+  public snakePassingThrough(snake: Snake, game: Game) {
+    this.content.snakePassingThrough(snake, game)
   }
 }

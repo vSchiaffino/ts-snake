@@ -8,6 +8,7 @@ export default class Game {
   private view: View
   public snake: Snake
   public board: Board
+  public playing = true
   constructor(canvas: HTMLCanvasElement) {
     this.board = new Board(20, 20)
     this.snake = this.spawnSnake()
@@ -28,10 +29,12 @@ export default class Game {
   }
 
   public tick() {
+    if (!this.playing) return
+
     const boardHasFood = this.board.hasFoodInAnySquare()
     if (!boardHasFood) this.spawnFood()
 
-    this.snake.tick(this.board)
+    this.snake.tick(this)
   }
 
   private spawnFood() {
@@ -46,5 +49,9 @@ export default class Game {
       throw new Error('min must be less than or equal to max')
     }
     return Math.floor(Math.random() * (max - min + 1)) + min
+  }
+
+  public lose() {
+    this.playing = false
   }
 }

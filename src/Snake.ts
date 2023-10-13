@@ -1,7 +1,6 @@
 import SnakeBody from './content/SnakeBody.js'
 import Board from './Board.js'
-import Square from 'Square.js'
-import FoodContent from 'content/Food.js'
+import Game from './Game.js'
 
 export enum Direction {
   UP,
@@ -38,7 +37,8 @@ export default class Snake {
     this.body = [firstBody, secondBody, thirdBody]
   }
 
-  public tick(board: Board) {
+  public tick(game: Game) {
+    const board = game.board
     if (this.direction === null) return
     const posModifier = mapDirectionWithModifier[this.direction]
 
@@ -55,10 +55,11 @@ export default class Snake {
       }
 
       if (!newBodySquare) {
+        game.lose()
         return
       }
 
-      newBodySquare.snakePassingThrough(this)
+      newBodySquare.snakePassingThrough(this, game)
       newBodySquare.setContent(oldBodySquare.popContent())
       lastMovedSquare = oldBodySquare
     }

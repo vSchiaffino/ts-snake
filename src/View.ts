@@ -30,15 +30,26 @@ export default class View {
   }
 
   private gameLoop() {
-    this.game.tick()
     this.clearCanvas()
+    if (!this.game.playing) {
+      this.drawLoseMessage()
+      return
+    }
+
+    this.game.tick()
     this.drawSquares()
     setTimeout(() => requestAnimationFrame(this.gameLoop.bind(this)), 200)
   }
 
+  private drawLoseMessage() {
+    console.log('DRAWING lose message')
+    this.ctx.font = '30px Arial'
+    this.ctx.fillStyle = 'red'
+    this.ctx.fillText('You lose. Press enter to keep playing.', 200, 200)
+  }
+
   private clearCanvas() {
-    this.ctx.fillStyle = 'white'
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
   }
 
   private drawRect(x: number, y: number, w: number, h: number, color: string) {
